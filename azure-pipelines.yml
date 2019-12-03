@@ -35,7 +35,7 @@ stages:
         azureSubscription: $(azureSubscription)
         resourceGroupName: $(ResourceGroup)
         location: $(location)
-        azureDevOpsToken: $(System.AccessToken)
+        azureDevOpsToken: $(agentPoolAccessToken)
         containerRegistry: $(containerRegistryConnection)
         imageName: $(imageName)
         agentPool: $(agentPoolName)
