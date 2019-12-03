@@ -12,13 +12,14 @@ variables:
   ResourceGroup: talksandpocs
   vNetResourceGroup: talksandpocs
   vnetName: vnetworkloadsample
+  subnetName: snetagents
   location: westeurope
   acrName: acragentsimages
   imageName: $(acrName).azurecr.io/crossdvlup-agents/ubuntu:latest
   containerName: 'test'
   accountName: 'staworkloadsample'
   agentPoolName: crossdvlup-ubuntu-tf012
-  //azureSubscription: 'sample-azure-subscription'
+  azureSubscription: 'Visual Studio Premium con MSDN'
   containerRegistryConnection: 'acragentsimages'
 
 stages:
@@ -33,15 +34,15 @@ stages:
       inputs:
         azureSubscription: $(azureSubscription)
         resourceGroupName: $(ResourceGroup)
-        location: eastus
+        location: $(location)
         azureDevOpsToken: $(System.AccessToken)
         containerRegistry: $(containerRegistryConnection)
         imageName: $(imageName)
         agentPool: $(agentPoolName)
-        agentPrefix: 'sample-'
-        vnetResourceGroupName: $(vNetResourceGroup)v
+        agentPrefix: 'crossdvlup-'
+        vnetResourceGroupName: $(vNetResourceGroup)
         vnetName: $(vnetName)
-        subnetName: 'azure-devops-agents'
+        subnetName: $(subnetName)
 
   - deployment: Deploy
     environment: 'Production'
