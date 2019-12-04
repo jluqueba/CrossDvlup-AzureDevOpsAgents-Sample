@@ -56,12 +56,6 @@ stages:
           - checkout: self
             fetchDepth: 1
             clean: true
-          - script: |
-              git config --global http.extraheader "AUTHORIZATION: bearer $ACCESS_TOKEN"
-            displayName: Enable Git OAuth Token
-          - script: terraform get --update
-            displayName: Terraform Clean
-            condition: always()
           - task: TerraformTaskV1@0
             displayName: 'Terraform Init'
             inputs:
