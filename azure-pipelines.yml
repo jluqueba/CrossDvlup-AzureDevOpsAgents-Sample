@@ -61,10 +61,12 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'plan'
+              commandOptions: '-input=false -var "resource_group_name=$(ResourceGroup)" -var "storage_account_name=$(ResourceGroup)" -var "accountName=$(containerName)" -out blobplan'
               environmentServiceNameAzureRM: 'Visual Studio Premium con MSDN'
           - task: TerraformTaskV1@0
             inputs:
               provider: 'azurerm'
               command: 'apply'
+              commandOptions: '-auto-approve blobplan'
               environmentServiceNameAzureRM: 'Visual Studio Premium con MSDN'
 
