@@ -58,6 +58,11 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
+              backendServiceArm: 'Visual Studio Premium con MSDN'
+              backendAzureRmResourceGroupName: 'talksandpocs'
+              backendAzureRmStorageAccountName: 'staworkloadsample'
+              backendAzureRmContainerName: 'test'
+              backendAzureRmKey: 'crossdvlupsampleplan'
           - task: TerraformTaskV1@0
             displayName: 'Terraform Plan'
             inputs:
