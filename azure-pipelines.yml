@@ -53,27 +53,14 @@ stages:
       runOnce:
         deploy:
           steps:
-          - script: date > $(Pipeline.Workspace)/data.txt
-            displayName: 'create dummy file to upload'
-          - task: AzureCLI@1
-            displayName: 'copy files to container'
+          - task: TerraformTaskV1@0
             inputs:
-              azureSubscription: $(azureSubscription)
-              scriptLocation: inlineScript
-              inlineScript: |          
-                connectionString=$(az storage account show-connection-string --name $(accountName) --query connectionString --output tsv)
-                
-                echo listing
-                az storage blob list --container-name $(containerName) \
-                --auth-mode key \
-                --connection-string "$connectionString"
-                
-                echo "uploading"
-                
-                az storage blob upload-batch --auth-mode key\
-                  --account-name $(accountName) \
-                  --destination $(containerName) \
-                  --source $(Pipeline.Workspace) \
-                  --pattern '*.*' \
-                  --connection-string "$connectionString"
+              provider: 'azurerm'
+              command: 'init'
+          - task: TerraformTaskV1@0
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              commandOptions: '-input=false -out=blob.tfplan'
+              environmentServiceNameAzureRM: 'Visual Studio Premium con MSDN'
 
