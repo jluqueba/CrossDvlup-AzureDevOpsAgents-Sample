@@ -61,6 +61,10 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'plan'
-              commandOptions: '-input=false -out=blob.tfplan'
+              environmentServiceNameAzureRM: 'Visual Studio Premium con MSDN'
+          - task: TerraformTaskV1@0
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
               environmentServiceNameAzureRM: 'Visual Studio Premium con MSDN'
 
