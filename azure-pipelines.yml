@@ -61,17 +61,12 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
-              backendServiceArm: 'Visual Studio Premium con MSDN'
-              backendAzureRmResourceGroupName: 'talksandpocs'
-              backendAzureRmStorageAccountName: 'staworkloadsample'
-              backendAzureRmContainerName: 'test'
-              backendAzureRmKey: 'crossdvlupsampleplan'
           - task: TerraformTaskV1@0
             displayName: 'Terraform Plan'
             inputs:
               provider: 'azurerm'
               command: 'plan'
-              commandOptions: '-input=false -var "resource_group_name=$(ResourceGroup)" -var "storage_account_name=$(ResourceGroup)" -var "accountName=$(containerName)" -out crossdvlupsampleplan'
+              commandOptions: '-input=false -var "resource_group_name=$(ResourceGroup)" -var "storage_account_name=$(ResourceGroup)" -var "storage_container_name=$(containerName)" -out crossdvlupsampleplan'
               environmentServiceNameAzureRM: 'Visual Studio Premium con MSDN'
           - task: TerraformTaskV1@0
             displayName: 'Terraform Validate and Apply'
