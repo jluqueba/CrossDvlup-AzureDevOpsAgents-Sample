@@ -6,7 +6,7 @@ data "azurerm_storage_account" "sta" {
   name                     = "${var.storage_account_name}"
   resource_group_name      = "${data.azurerm_resource_group.rsg.name}"
 
-  depends_on = ["data.azurerm_resource_group.rsg"]
+  depends_on = [data.azurerm_resource_group.rsg]
 }
 
 data "azurerm_storage_container" "stc" {
@@ -14,8 +14,8 @@ data "azurerm_storage_container" "stc" {
   resource_group_name   = "${data.azurerm_resource_group.rsg.name}"
   storage_account_name  = "${data.azurerm_storage_account.sta.name}"
   
-  depends_on = ["data.azurerm_resource_group.rsg",
-                "data.azurerm_storage_account.sta"]
+  depends_on = [data.azurerm_resource_group.rsg,
+                data.azurerm_storage_account.sta]
 }
 
 resource "azurerm_storage_blob" "example" {
@@ -26,7 +26,7 @@ resource "azurerm_storage_blob" "example" {
   type                   = "Block"
   source                 = "testfile.txt"
 
-  depends_on = ["data.azurerm_resource_group.rsg",
-                "data.azurerm_storage_account.sta", 
-                "data.azurerm_storage_container.stc"]
+  depends_on = [data.azurerm_resource_group.rsg,
+                data.azurerm_storage_account.sta, 
+                data.azurerm_storage_container.stc]
 }
