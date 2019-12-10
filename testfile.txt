@@ -1,2 +1,2 @@
-This is a test file as a proof of a sucess pipeline execute with a ephemeral custom agent.
+This is a test file as a proof of a success pipeline execute with a ephemeral custom agent.
 This is awesome!!!
