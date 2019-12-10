@@ -53,27 +53,31 @@ stages:
       runOnce:
         deploy:
           steps:
-          - script: date > $(Pipeline.Workspace)/data.txt
-            displayName: 'create dummy file to upload'
-          - task: AzureCLI@1
-            displayName: 'copy files to container'
+          - checkout: self
+            fetchDepth: 1
+            clean: true
+          - task: TerraformTaskV1@0
+            displayName: 'Terraform Init'
             inputs:
-              azureSubscription: $(azureSubscription)
-              scriptLocation: inlineScript
-              inlineScript: |          
-                connectionString=$(az storage account show-connection-string --name $(accountName) --query connectionString --output tsv)
-                
-                echo listing
-                az storage blob list --container-name $(containerName) \
-                --auth-mode key \
-                --connection-string "$connectionString"
-                
-                echo "uploading"
-                
-                az storage blob upload-batch --auth-mode key\
-                  --account-name $(accountName) \
-                  --destination $(containerName) \
-                  --source $(Pipeline.Workspace) \
-                  --pattern '*.*' \
-                  --connection-string "$connectionString"
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'Visual Studio Premium con MSDN'
+              backendAzureRmResourceGroupName: 'talksandpocs'
+              backendAzureRmStorageAccountName: 'staworkloadsample'
+              backendAzureRmContainerName: 'test'
+              backendAzureRmKey: 'crossdvlupsample.tfstate'
+          - task: TerraformTaskV1@0
+            displayName: 'Terraform Plan'
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              commandOptions: '-input=false -var "resource_group_name=$(ResourceGroup)" -var "storage_account_name=$(accountName)" -var "storage_container_name=$(containerName)" -out crossdvlupsampleplan'
+              environmentServiceNameAzureRM: 'Visual Studio Premium con MSDN'
+          - task: TerraformTaskV1@0
+            displayName: 'Terraform Validate and Apply'
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              commandOptions: '-auto-approve crossdvlupsampleplan'
+              environmentServiceNameAzureRM: 'Visual Studio Premium con MSDN'
 
